@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "financier-be"
+version = "0.1.0"
+description = "AWS-FastAPI backend code for Financier"
+authors = ["Ariel Catli <dev.arielcatli@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = {extras = ["standard"], version = "^0.115.5"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
