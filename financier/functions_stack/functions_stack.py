@@ -1,9 +1,9 @@
+import os
+
 from aws_cdk import Stack
 from aws_cdk import aws_lambda as _lambda
 from config.config import APP_NAME, DIR_FUNCTIONS, LAMBDA_FASTAPI, STAGE
 from constructs import Construct
-
-import os
 
 
 class FunctionsStack(Stack):
