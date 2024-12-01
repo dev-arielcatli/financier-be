@@ -1,2 +1,6 @@
 def handler(event, context):
-    return "hello world!"
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "text/plain"},
+        "body": "THIS IS NEW DEPLOYMENT",
+    }
