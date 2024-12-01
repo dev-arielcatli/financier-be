@@ -57,6 +57,16 @@ Make sure to update this when you are using a new python package.
 fastapi dev fastapi_lambda.py
 ```
 
+## Quality
+
+The project uses: `isort`, `ruff`, and `black` for code formatting. I've created a `.bat` file to run the necessary steps.
+
+```
+runner.bat
+```
+
+This will be improved in the future as I am trying to make `tox` work for the project.
+
 ## 🛣️ Roadmap
 
 ### Phase 1
