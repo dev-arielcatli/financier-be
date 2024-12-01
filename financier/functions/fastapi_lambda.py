@@ -1,6 +1,15 @@
-def handler(event, context):
+from fastapi import FastAPI
+
+from mangum import Mangum
+
+app = FastAPI()
+
+@app.get('/api')
+async def main():
     return {
         "statusCode": 200,
-        "headers": {"Content-Type": "text/plain"},
-        "body": "THIS IS NEW DEPLOYMENT",
+        "body": "Hello, world"
     }
+
+
+handler = Mangum(app)
