@@ -1,11 +1,8 @@
+from aws_cdk import CfnOutput, Stack
+from aws_cdk import aws_s3 as _s3
+from config.config import APP_NAME, STAGE
 from constructs import Construct
-from aws_cdk import (
-    Stack,
-    aws_s3 as _s3,
-    CfnOutput
-)
 
-from config.config import STAGE, APP_NAME
 
 class FEWebHostingStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
@@ -28,15 +25,18 @@ class FEWebHostingStack(Stack):
                 block_public_acls=False,
                 block_public_policy=False,
                 ignore_public_acls=False,
-                restrict_public_buckets=False
+                restrict_public_buckets=False,
             ),
             public_read_access=True,
             website_index_document="index.html",
-            website_error_document="index.html"
+            website_error_document="index.html",
         )
         self.FE_S3_BUCKET_URL = self.FE_S3_BUCKET.bucket_website_url
 
     def output_fe_bucket_url(self):
-        CfnOutput(self, self.get_s3_prefix("fe_bucket"), 
-                  value=self.FE_S3_BUCKET_URL, 
-                  description="URL of the web application")
+        CfnOutput(
+            self,
+            self.get_s3_prefix("fe_bucket"),
+            value=self.FE_S3_BUCKET_URL,
+            description="URL of the web application",
+        )
