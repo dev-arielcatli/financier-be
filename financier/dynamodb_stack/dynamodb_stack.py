@@ -11,11 +11,11 @@ class DynamoDBStack(Stack):
         self.create_table()
         self.create_db_policies()
 
-    def get_lambda_prefix(self) -> str:
+    def get_ddb_prefix(self) -> str:
         return f"{APP_NAME}-{STAGE}-table"
 
     def create_table(self):
-        name = f"{self.get_lambda_prefix()}-main"
+        name = f"{self.get_ddb_prefix()}-main"
         self.FINANCIER_TABLE = dynamodb.TableV2(
             self,
             name,
@@ -26,6 +26,11 @@ class DynamoDBStack(Stack):
             sort_key=dynamodb.Attribute(
                 name="category", type=dynamodb.AttributeType.STRING
             ),
+        )
+
+        self.FINANCIER_TABLE.add_local_secondary_index(
+            index_name=f"{self.get_ddb_prefix()}-main-id-index",
+            sort_key=dynamodb.Attribute(name="id", type=dynamodb.AttributeType.STRING),
         )
 
     def create_db_policies(self):
