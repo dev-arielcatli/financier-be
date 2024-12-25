@@ -71,3 +71,17 @@ class Expense(BaseModel):
 #         tags=["food", "grocery"],
 #     )
 #     new_expense.save()
+
+#     for expense in ExpenseDB.query("default", ExpenseDB.category.startswith(get_expense_category())):
+#         print(expense.name)
+#         print(expense.description)
+#         print(expense.amount)
+#         print(expense.quantity)
+#         print(expense.tags)
+#         print(expense.date)
+#         print(expense.created_at)
+#         print(expense.updated_at)
+#         print(expense.id)
+#         print(expense.category)
+#         print(expense.user_id)
+#         print("=====")
