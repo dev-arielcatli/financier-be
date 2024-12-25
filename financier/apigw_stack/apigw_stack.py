@@ -42,11 +42,3 @@ class APIGatewayStack(Stack):
             ),
             proxy=True,
         )
-
-        self.FASTAPI_API = self.ROOT_API.root.add_resource(ROOT_PATH)
-        self.FASTAPI_API.add_method(
-            http_method="ANY",
-            integration=_apigw.LambdaIntegration(
-                handler=functions_stack.FAST_API_FUNCTION, proxy=True
-            ),
-        )
