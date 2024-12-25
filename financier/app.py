@@ -3,6 +3,7 @@ from apigw_stack.apigw_stack import APIGatewayStack
 from config.config import APP_NAME, STAGE
 from functions_stack.functions_stack import FunctionsStack
 from s3_fe_stack.s3_fe_stack import FEWebHostingStack
+from dynamodb_stack.dynamodb_stack  import DynamoDBStack
 
 
 def create_stack_name(name: str) -> str:
@@ -10,8 +11,8 @@ def create_stack_name(name: str) -> str:
 
 
 app = cdk.App()
-
-functions_stack = FunctionsStack(app, create_stack_name("functions"))
+dynamodb_stack = DynamoDBStack(app, create_stack_name("dynamodb"))
+functions_stack = FunctionsStack(app, create_stack_name("functions"), database_stack=dynamodb_stack)
 apigw_stack = APIGatewayStack(
     app, create_stack_name("apigw"), functions_stack=functions_stack
 )
