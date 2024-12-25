@@ -1,7 +1,6 @@
 from fastapi import FastAPI
+from features.expense.expense import expense_router
 from mangum import Mangum
-
-from financier.functions.features.expense.expense import expense_router
 
 app = FastAPI()
 
