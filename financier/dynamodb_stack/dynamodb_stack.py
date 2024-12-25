@@ -1,11 +1,9 @@
-from aws_cdk import (
-    aws_dynamodb as dynamodb,
-    aws_iam as _iam,
-    Stack
-)
-
-from constructs import Construct
+from aws_cdk import Stack
+from aws_cdk import aws_dynamodb as dynamodb
+from aws_cdk import aws_iam as _iam
 from config.config import APP_NAME, STAGE
+from constructs import Construct
+
 
 class DynamoDBStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
@@ -22,8 +20,12 @@ class DynamoDBStack(Stack):
             self,
             name,
             table_name=name,
-            partition_key=dynamodb.Attribute(name="user_id", type=dynamodb.AttributeType.STRING),
-            sort_key=dynamodb.Attribute(name="category", type=dynamodb.AttributeType.STRING),
+            partition_key=dynamodb.Attribute(
+                name="user_id", type=dynamodb.AttributeType.STRING
+            ),
+            sort_key=dynamodb.Attribute(
+                name="category", type=dynamodb.AttributeType.STRING
+            ),
         )
 
     def create_db_policies(self):

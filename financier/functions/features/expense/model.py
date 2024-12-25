@@ -1,5 +1,7 @@
-from pydantic import BaseModel
 from datetime import datetime
+
+from pydantic import BaseModel
+
 
 class Expense(BaseModel):
     id: str
@@ -11,3 +13,4 @@ class Expense(BaseModel):
     created_at: datetime
     updated_at: datetime
     tags: list[str]
+    user_id: str

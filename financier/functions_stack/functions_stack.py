@@ -1,6 +1,7 @@
 import os
 
-from aws_cdk import (Stack, aws_iam as _iam)
+from aws_cdk import Stack
+from aws_cdk import aws_iam as _iam
 from aws_cdk import aws_lambda as _lambda
 from config.config import APP_NAME, DIR_FUNCTIONS, LAMBDA_FASTAPI, STAGE
 from constructs import Construct
@@ -8,7 +9,13 @@ from dynamodb_stack.dynamodb_stack import DynamoDBStack
 
 
 class FunctionsStack(Stack):
-    def __init__(self, scope: Construct, construct_id: str, database_stack: DynamoDBStack, **kwargs) -> None:
+    def __init__(
+        self,
+        scope: Construct,
+        construct_id: str,
+        database_stack: DynamoDBStack,
+        **kwargs,
+    ) -> None:
         super().__init__(scope, construct_id, **kwargs)
         self.GLOBAL_ENVIRONMENT = {"STAGE": STAGE, "APP_NAME": APP_NAME}
         self.create_python_layer()
@@ -27,7 +34,9 @@ class FunctionsStack(Stack):
             layers=[self.python_layer],
             code=_lambda.Code.from_asset(DIR_FUNCTIONS),
             handler=f"{name}.handler",
-            role=self.create_function_role("fastapi-dynamodb-role", [database_stack.reader_writer_policy]),
+            role=self.create_function_role(
+                "fastapi-dynamodb-role", [database_stack.reader_writer_policy]
+            ),
             environment=self.GLOBAL_ENVIRONMENT,
         )
 
@@ -66,6 +75,6 @@ class FunctionsStack(Stack):
         for policy in policies:
             role.add_to_policy(policy)
         return role
-    
+
     def get_function_role_name(self, name: str) -> str:
         return f"{self.get_lambda_prefix()}-{name}-role"
