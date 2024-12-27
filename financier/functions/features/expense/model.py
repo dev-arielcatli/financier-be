@@ -41,7 +41,7 @@ class ExpenseDB(Model):
     ):
         super().__init__(hash_key, range_key, _user_instantiated, **attributes)
         self.id = self.get_unique_id() if not self.id else self.id
-        self.category = self.get_category()
+        self.category = self.get_category() if not self.category else self.category
         if self.created_at is None:
             self.created_at = datetime.now()
         else:
@@ -67,6 +67,12 @@ class ExpenseDB(Model):
 
     def get_unique_id(self):
         return str(uuid4())
+
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        self.updated_at = datetime.now()
+        self.save()
 
 
 class Expense(BaseModel):
