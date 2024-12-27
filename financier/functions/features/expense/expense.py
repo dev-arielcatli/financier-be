@@ -2,7 +2,7 @@ from datetime import datetime
 from http import HTTPStatus
 
 from fastapi import APIRouter, HTTPException
-from features.expense.model import ExpenseDB, get_expense_category
+from features.expense.model import ExpenseDB, ExpenseRequest, get_expense_category
 
 expense_router = APIRouter(prefix="/api/expense", tags=["expense"])
 
@@ -29,3 +29,10 @@ async def get_expense(expense_id: str, user_id: str):
             status_code=HTTPStatus.NOT_FOUND, detail="EXPENSE_NOT_FOUND"
         )
     return expense.attribute_values
+
+
+@expense_router.post("/")
+async def create_expense(expense: ExpenseRequest, user_id: str):
+    new_expense = ExpenseDB(user_id=user_id, **expense.model_dump())
+    new_expense.save()
+    return new_expense.attribute_values

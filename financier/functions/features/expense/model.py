@@ -82,6 +82,15 @@ class Expense(BaseModel):
     user_id: str
 
 
+class ExpenseRequest(BaseModel):
+    name: str
+    description: str | None
+    amount: float
+    quantity: int
+    date: datetime | None = None
+    tags: list[str]
+
+
 # FOR TESTING ONLY
 # if __name__ == "__main__":
 #     from datetime import datetime
