@@ -1,6 +1,7 @@
 from datetime import datetime
+from http import HTTPStatus
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from features.expense.model import ExpenseDB, get_expense_category
 
 expense_router = APIRouter(prefix="/api/expense", tags=["expense"])
@@ -19,7 +20,12 @@ async def list_expenses(
 
 @expense_router.get("/{expense_id}")
 async def get_expense(expense_id: str, user_id: str):
-    expense = ExpenseDB.expense_id_index.query(
-        user_id, ExpenseDB.id == expense_id
-    ).next()
+    try:
+        expense = ExpenseDB.expense_id_index.query(
+            user_id, ExpenseDB.id == expense_id
+        ).next()
+    except StopIteration as e:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND, detail="EXPENSE_NOT_FOUND"
+        )
     return expense.attribute_values
