@@ -68,7 +68,7 @@ class IncomeDB(Model):
 
     def get_unique_id(self):
         return str(uuid4())
-    
+
     def update(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
