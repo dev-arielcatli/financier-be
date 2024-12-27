@@ -59,7 +59,7 @@ class IncomeDB(Model):
     description = UnicodeAttribute(null=True)
     amount = NumberAttribute(null=True, default=0)
     quantity = NumberAttribute(null=True, default=1)
-    source = ListAttribute(null=True)
+    source = ListAttribute(default=(), null=True)
     date = UTCDateTimeAttribute(null=False)
     tags = ListAttribute(default=())
 
