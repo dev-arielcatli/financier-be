@@ -9,7 +9,7 @@ class DynamoDBStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
         self.create_table()
-        self.create_expense_id_index()
+        self.create_entity_id_index()
         self.create_db_policies()
 
     def get_ddb_prefix(self) -> str:
@@ -29,7 +29,7 @@ class DynamoDBStack(Stack):
             ),
         )
 
-    def create_expense_id_index(self):
+    def create_entity_id_index(self):
         self.FINANCIER_TABLE.add_local_secondary_index(
             index_name=f"{self.get_ddb_prefix()}-main-id-index",
             sort_key=dynamodb.Attribute(name="id", type=dynamodb.AttributeType.STRING),
