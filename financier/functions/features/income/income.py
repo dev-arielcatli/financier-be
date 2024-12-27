@@ -34,3 +34,14 @@ async def create_income(income: IncomeRequest, user_id: str):
     new_income = IncomeDB(user_id=user_id, **income.model_dump())
     new_income.save()
     return new_income.attribute_values
+
+@income_router.put("/{income_id}")
+async def update_income(income_id: str, income: IncomeRequest, user_id: str):
+    try:
+        income_db = IncomeDB.income_id_index.query(
+            user_id, IncomeDB.id == income_id
+        ).next()
+    except StopIteration as e:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="INCOME_NOT_FOUND")
+    income_db.update(**income.model_dump())
+    return income_db.attribute_values
