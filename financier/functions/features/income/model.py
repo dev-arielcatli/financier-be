@@ -68,6 +68,12 @@ class IncomeDB(Model):
 
     def get_unique_id(self):
         return str(uuid4())
+    
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        self.updated_at = datetime.now()
+        self.save()
 
 
 class Income(BaseModel):
@@ -85,12 +91,12 @@ class Income(BaseModel):
 
 
 class IncomeRequest(BaseModel):
-    name: str
-    description: str | None
-    amount: float
-    quantity: int
+    name: str | None = None
+    description: str | None = None
+    amount: float | None = None
+    quantity: int | None = None
     date: datetime | None = None
-    tags: list[str]
+    tags: list[str] | None = None
     source: list[str] | None = None
 
 

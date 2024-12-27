@@ -89,12 +89,12 @@ class Expense(BaseModel):
 
 
 class ExpenseRequest(BaseModel):
-    name: str
-    description: str | None
-    amount: float
-    quantity: int
+    name: str | None = None
+    description: str | None = None
+    amount: float | None = None
+    quantity: int | None = None
     date: datetime | None = None
-    tags: list[str]
+    tags: list[str] | None = None
 
 
 # FOR TESTING ONLY
