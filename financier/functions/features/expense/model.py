@@ -40,10 +40,13 @@ class ExpenseDB(Model):
         self, hash_key=None, range_key=None, _user_instantiated=True, **attributes
     ):
         super().__init__(hash_key, range_key, _user_instantiated, **attributes)
-        self.id = self.get_unique_id()
+        self.id = self.get_unique_id() if not self.id else self.id
         self.category = self.get_category()
-        self.created_at = datetime.now()
-        self.date = datetime.now()
+        if self.created_at is None:
+            self.created_at = datetime.now()
+        else:
+            self.updated_at = datetime.now()
+        self.date = datetime.now() if not self.date else self.date
 
     user_id = UnicodeAttribute(hash_key=True)
     category = UnicodeAttribute(range_key=True, default=get_expense_category)

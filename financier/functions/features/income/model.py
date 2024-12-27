@@ -40,10 +40,13 @@ class IncomeDB(Model):
         self, hash_key=None, range_key=None, _user_instantiated=True, **attributes
     ):
         super().__init__(hash_key, range_key, _user_instantiated, **attributes)
-        self.id = self.get_unique_id()
+        self.id = self.get_unique_id() if not self.id else self.id
         self.category = self.get_category()
-        self.created_at = datetime.now()
-        self.date = datetime.now()
+        if self.created_at is None:
+            self.created_at = datetime.now()
+        else:
+            self.updated_at = datetime.now()
+        self.date = datetime.now() if not self.date else self.date
 
     user_id = UnicodeAttribute(hash_key=True)
     category = UnicodeAttribute(range_key=True, default=get_income_category)
@@ -56,7 +59,7 @@ class IncomeDB(Model):
     description = UnicodeAttribute(null=True)
     amount = NumberAttribute(null=True, default=0)
     quantity = NumberAttribute(null=True, default=1)
-    source = UnicodeAttribute(null=True)
+    source = ListAttribute(null=True)
     date = UTCDateTimeAttribute(null=False)
     tags = ListAttribute(default=())
 
@@ -78,7 +81,17 @@ class Income(BaseModel):
     updated_at: datetime
     tags: list[str]
     user_id: str
-    source: str | None
+    source: list[str] | None
+
+
+class IncomeRequest(BaseModel):
+    name: str
+    description: str | None
+    amount: float
+    quantity: int
+    date: datetime | None = None
+    tags: list[str]
+    source: list[str] | None = None
 
 
 # FOR TESTING ONLY
@@ -89,8 +102,10 @@ if __name__ == "__main__":
         user_id="default",
         name="Salary",
         amount=1000,
+        description="Monthly salary",
         date=datetime.now(),
         tags=["salary", "income"],
+        source="Employer",
     )
     new_income.save()
 
