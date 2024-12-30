@@ -38,7 +38,7 @@ class APIGatewayStack(Stack):
             deploy=False,
             default_cors_preflight_options=_apigw.CorsOptions(
                 allow_origins=_apigw.Cors.ALL_ORIGINS,
-                allow_methods=_apigw.Cors.ALL_METHODS,
+                allow_methods=_apigw.Cors.ALL_METHODS + ["OPTIONS"],
             ),
             proxy=True,
         )

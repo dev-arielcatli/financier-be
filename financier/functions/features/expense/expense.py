@@ -6,7 +6,7 @@ from fastapi import APIRouter, Body, HTTPException
 from fastapi.responses import JSONResponse
 from features.expense.model import ExpenseDB, ExpenseRequest, get_expense_category
 
-expense_router = APIRouter(prefix="/api/expense", tags=["expense"])
+expense_router = APIRouter(prefix="/expense", tags=["expense"])
 
 
 @expense_router.get("/")
@@ -35,6 +35,7 @@ async def get_expense(expense_id: str, user_id: str):
 
 @expense_router.post("/")
 async def create_expense(expense: ExpenseRequest, user_id: str):
+    print(expense.model_dump())
     new_expense = ExpenseDB(user_id=user_id, **expense.model_dump())
     new_expense.save()
     return new_expense.attribute_values
