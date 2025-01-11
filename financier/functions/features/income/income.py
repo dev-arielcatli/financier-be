@@ -6,7 +6,7 @@ from fastapi import APIRouter, Body, HTTPException
 from fastapi.responses import JSONResponse
 from features.income.model import IncomeDB, IncomeRequest, get_income_category
 
-income_router = APIRouter(prefix="/income", tags=["income"])
+income_router = APIRouter(prefix="/v1/income", tags=["income"])
 
 
 @income_router.get("/")
