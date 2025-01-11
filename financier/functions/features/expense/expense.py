@@ -5,7 +5,6 @@ from typing import Annotated
 from fastapi import APIRouter, Body, HTTPException, Response
 from fastapi.responses import JSONResponse
 from features.expense.model import ExpenseDB, ExpenseRequest, get_expense_category
-
 from shared.response.headers import get_cors_headers
 
 expense_router = APIRouter(prefix="/v1/expense", tags=["expense"])
@@ -13,18 +12,19 @@ expense_router = APIRouter(prefix="/v1/expense", tags=["expense"])
 
 @expense_router.get("/")
 async def list_expenses(
-    response: Response, user_id: str, start_date: datetime | None = None, end_date: datetime | None = None
+    user_id: str,
+    start_date: datetime | None = None,
+    end_date: datetime | None = None,
 ):
     # TODO: Add date filtering
     expenses = ExpenseDB.query(
         user_id, ExpenseDB.category.startswith(get_expense_category())
     )
-    response.headers.update(get_cors_headers())
     return [expense.attribute_values for expense in expenses]
 
 
 @expense_router.get("/{expense_id}")
-async def get_expense(response: Response, expense_id: str, user_id: str):
+async def get_expense(expense_id: str, user_id: str):
     try:
         expense = ExpenseDB.expense_id_index.query(
             user_id, ExpenseDB.id == expense_id
@@ -33,13 +33,11 @@ async def get_expense(response: Response, expense_id: str, user_id: str):
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND, detail="EXPENSE_NOT_FOUND"
         )
-    response.headers.update(get_cors_headers())
     return expense.attribute_values
 
 
 @expense_router.post("/")
 async def create_expense(expense: ExpenseRequest, user_id: str):
-    print(expense.model_dump())
     new_expense = ExpenseDB(user_id=user_id, **expense.model_dump())
     new_expense.save()
     return new_expense.attribute_values
@@ -56,6 +54,7 @@ async def update_expense(expense_id: str, expense: ExpenseRequest, user_id: str)
             status_code=HTTPStatus.NOT_FOUND, detail="EXPENSE_NOT_FOUND"
         )
     fetched_expense.update(**expense.model_dump())
+
     return fetched_expense.attribute_values
 
 
@@ -77,3 +76,9 @@ async def delete_expense(ids: Annotated[list[str], Body()], user_id: str):
         status_code=HTTPStatus.OK,
         content={"deleted": deleted, "not_found": not_found},
     )
+
+
+@expense_router.options("/")
+async def fix_options(response: Response):
+    response.headers.update(get_cors_headers())
+    return True
